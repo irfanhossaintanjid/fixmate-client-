@@ -18,9 +18,14 @@ export async function getServices(query: ServicesQuery): Promise<ServicesRespons
     if (value) params.set(key, value);
   }
 
-  const response = await fetch(`${baseUrl}/api/services?${params.toString()}`, {
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error("Unable to fetch services.");
-  return response.json() as Promise<ServicesResponse>;
+  try {
+    const response = await fetch(`${baseUrl}/api/services?${params.toString()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error("Unable to fetch services.");
+    return await response.json() as ServicesResponse;
+  } catch {
+    // Convert connection failures into the same friendly services error state.
+    throw new Error("Unable to fetch services.");
+  }
 }
