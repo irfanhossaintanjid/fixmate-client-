@@ -2,3 +2,90 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme inline {
+  --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  color-scheme: light;
+  --background: #f2f0fa;
+  --foreground: #18112b;
+  --card: #ffffff;
+  --card-foreground: #18112b;
+  --popover: #ffffff;
+  --popover-foreground: #18112b;
+  --primary: #5145cd;
+  --primary-foreground: #ffffff;
+  --secondary: #eeecff;
+  --secondary-foreground: #312e81;
+  --muted: #eeecf7;
+  --muted-foreground: #6b6680;
+  --accent: #6366f1;
+  --accent-foreground: #ffffff;
+  --destructive: #b4233a;
+  --border: #e5e1f0;
+  --input: #e5e1f0;
+  --ring: #5145cd;
+  --radius: 0.875rem;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #18112b;
+  --foreground: #f8fafc;
+  --card: #312e45;
+  --card-foreground: #f8fafc;
+  --popover: #312e45;
+  --popover-foreground: #f8fafc;
+  --primary: #a5b4fc;
+  --primary-foreground: #18112b;
+  --secondary: #312e45;
+  --secondary-foreground: #e7e8ff;
+  --muted: #29243b;
+  --muted-foreground: #c5c1d6;
+  --accent: #818cf8;
+  --accent-foreground: #18112b;
+  --destructive: #fda4af;
+  --border: #403953;
+  --input: #403953;
+  --ring: #a5b4fc;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  min-width: 320px;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 24%, transparent);
+}
