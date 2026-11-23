@@ -7,6 +7,13 @@ export type Booking = {
   serviceTitle?: string;
   serviceImage?: string;
   category?: string;
+  serviceMode?: string;
+  serviceArea?: string;
+  customerName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  address?: string;
+  problemDescription?: string;
   technicianName?: string;
   preferredDate?: string;
   basePrice?: number;
