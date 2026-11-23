@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { ManageRequestsOverview } from "@/components/dashboard/technician/requests/ManageRequestsOverview";
 import { dashboardFetch, getDashboardSession } from "@/lib/dashboard/server-api";
+import { getDashboardPath } from "@/lib/roles";
 import type { Booking, BookingStatus } from "@/lib/dashboard/types";
 
 export const metadata = { title: "Manage Requests | FixMate" };
@@ -10,10 +11,10 @@ const sortValues = ["newest", "oldest", "preferred_earliest", "preferred_latest"
 export type RequestSort = (typeof sortValues)[number];
 export type TechnicianBookingCounts = Record<BookingStatus, number> & { all: number };
 
-export default async function TechnicianRequestsPage({ searchParams }: PageProps<"/dashboard/technician/requests">) {
+export default async function TechnicianRequestsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const session = await getDashboardSession();
   if (!session) return null;
-  if (session.user.role !== "technician") redirect("/dashboard/" + (session.user.role || "customer"));
+  if (session.user.role !== "technician") redirect(getDashboardPath(session.user.role || "customer"));
 
   const query = await searchParams;
   const statusParam = typeof query.status === "string" ? query.status : "all";

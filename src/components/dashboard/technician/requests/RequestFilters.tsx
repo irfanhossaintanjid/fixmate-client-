@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, X } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookingStatus } from "@/lib/dashboard/types";
@@ -23,6 +24,6 @@ export function RequestFilters({ status, search, sort }: { status: "all" | Booki
         <option value="newest">Newest First</option><option value="oldest">Oldest First</option><option value="preferred_earliest">Preferred Date: Earliest</option><option value="preferred_latest">Preferred Date: Latest</option>
       </select>
     </form>
-    {hasFilters && <a href="/dashboard/technician/requests" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 rounded-xl px-3 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X className="size-3.5" aria-hidden="true" /> Clear</a>}
+    {hasFilters && <Link href="/dashboard/technician/requests" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 rounded-xl px-3 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X className="size-3.5" aria-hidden="true" /> Clear</Link>}
   </div>;
 }
