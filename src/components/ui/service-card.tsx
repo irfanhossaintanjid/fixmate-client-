@@ -1,4 +1,8 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowRight,
   Fan,
@@ -40,6 +44,9 @@ export type ServiceCardProps = {
   price: string;
   technician: string;
   location: string;
+  image?: string;
+  serviceId?: string;
+  isSample?: boolean;
 };
 
 export function ServiceCard({
@@ -50,30 +57,37 @@ export function ServiceCard({
   price,
   technician,
   location,
+  image,
+  serviceId,
+  isSample = true,
 }: ServiceCardProps) {
   const Icon = iconByKind[kind] ?? Zap;
+  const [imageFailed, setImageFailed] = useState(false);
+  const serviceHref = serviceId ? `/services/${encodeURIComponent(serviceId)}` : "/services";
 
   return (
     <Card className="group overflow-hidden rounded-2xl border-border/80 bg-card p-0 shadow-sm shadow-[#211A4D]/[0.035] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/[0.07]">
       <div
         role="img"
-        aria-label={`Illustrative ${category.toLowerCase()} repair graphic`}
-        className={`relative flex h-40 items-center justify-center overflow-hidden bg-gradient-to-br ${toneByKind[kind] ?? toneByKind.electrical}`}
+        aria-label={image && !imageFailed ? `${title} service image` : `Illustrative ${category.toLowerCase()} repair graphic`}
+        className={`relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br ${toneByKind[kind] ?? toneByKind.electrical}`}
       >
-        <div className="absolute -left-10 -top-20 size-52 rounded-full border border-current/10" />
-        <div className="absolute -bottom-28 -right-8 size-64 rounded-full border border-current/10" />
+        {image && !imageFailed ? (
+          <Image src={image} alt={`${title} service`} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover" onError={() => setImageFailed(true)} />
+        ) : (
+          <>
+            <div className="absolute -left-10 -top-20 size-52 rounded-full border border-current/10" />
+            <div className="absolute -bottom-28 -right-8 size-64 rounded-full border border-current/10" />
+          </>
+        )}
         <span className="absolute left-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-medium text-foreground shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#18112b]/75 dark:text-foreground">
           {category}
         </span>
-        <span className="absolute right-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#18112b]/75 dark:text-muted-foreground">
-          Sample listing
-        </span>
-        <div className="relative grid size-24 place-items-center rounded-[1.7rem] border border-white/70 bg-white/55 shadow-xl shadow-slate-900/5 backdrop-blur-sm transition-transform duration-300 group-hover:scale-105 dark:border-white/10 dark:bg-white/[0.06]">
-          <Icon className="size-12 stroke-[1.25]" aria-hidden="true" />
-        </div>
+        {isSample ? <span className="absolute right-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-medium text-muted-foreground shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#18112b]/75 dark:text-muted-foreground">Sample listing</span> : null}
+        {!image || imageFailed ? <div className="relative grid size-24 place-items-center rounded-[1.7rem] border border-white/70 bg-white/55 shadow-xl shadow-slate-900/5 backdrop-blur-sm transition-transform duration-300 group-hover:scale-105 dark:border-white/10 dark:bg-white/[0.06]"><Icon className="size-12 stroke-[1.25]" aria-hidden="true" /></div> : null}
       </div>
 
-      <div className="flex min-h-[215px] flex-col p-4 sm:p-5">
+      <div className="flex min-h-[220px] flex-1 flex-col p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3 className="line-clamp-2 text-[15px] font-semibold leading-5 tracking-[-0.02em] text-card-foreground">
@@ -94,12 +108,12 @@ export function ServiceCard({
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-border/70 pt-3">
           <div>
             <span className="block text-[9px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-              Starting price
+              {isSample ? "Starting price" : "Starting from"}
             </span>
             <span className="mt-0.5 block text-sm font-semibold text-foreground">{price}</span>
           </div>
           <Link
-            href="/services"
+            href={serviceHref}
             className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-secondary px-3 text-xs font-medium text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             View details

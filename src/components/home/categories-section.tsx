@@ -16,31 +16,37 @@ const categories = [
     title: "Smartphone",
     description: "Screen, battery, charging, and software repairs.",
     icon: Smartphone,
+    href: "/services?category=Smartphone",
   },
   {
     title: "Laptop & PC",
     description: "Hardware, performance, display, and setup support.",
     icon: Laptop,
+    href: "/services?category=Laptop%20%26%20PC",
   },
   {
     title: "Air Conditioner",
     description: "Cooling, cleaning, installation, and maintenance.",
     icon: Fan,
+    href: "/services?category=AC",
   },
   {
     title: "Refrigerator",
     description: "Cooling, leaks, unusual noise, and appliance care.",
     icon: Refrigerator,
+    href: "/services?category=Refrigerator",
   },
   {
     title: "Television",
     description: "Screen, picture, sound, and connectivity repairs.",
     icon: Tv,
+    href: "/services?category=TV",
   },
   {
     title: "Washing Machine",
     description: "Drainage, spin cycle, vibration, and other repairs.",
     icon: WashingMachine,
+    href: "/services?category=Washing%20Machine",
   },
 ];
 
@@ -78,6 +84,7 @@ export function CategoriesSection() {
             title="Electrical Systems"
             description="Home wiring, lighting, outlets, and electrical troubleshooting."
             icon={Zap}
+            href="/services?category=Electrical"
             className="lg:col-span-2"
           />
         </div>

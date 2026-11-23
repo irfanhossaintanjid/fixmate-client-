@@ -35,6 +35,7 @@ export default function Navber() {
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/" && !activeHash;
     if (href === "/services") return pathname.startsWith("/services");
+    if (href === "/#about") return pathname === "/" && activeHash === "#about";
     if (href === "/about#how-it-works") {
       return pathname === "/about" && activeHash === "#how-it-works";
     }

@@ -18,7 +18,7 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? (
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+        <p className={`${align === "center" ? "mx-auto" : ""} mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7`}>
           {description}
         </p>
       ) : null}
