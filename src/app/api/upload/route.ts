@@ -1,4 +1,5 @@
 import "server-only";
+import { auth } from "@/lib/auth";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const MAX_REQUEST_SIZE = MAX_FILE_SIZE + 64 * 1024;
@@ -54,6 +55,12 @@ function isRateLimited(ip: string) {
 }
 
 export async function POST(request: Request) {
+  const uploadContext = new URL(request.url).searchParams.get("context");
+  if (uploadContext === "profile") {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session) return Response.json({ message: "Sign in to upload a profile photo." }, { status: 401 });
+  }
+
   if (!isAllowedOrigin(request.headers.get("origin"))) {
     return Response.json({ message: "Upload request is not allowed." }, { status: 403 });
   }

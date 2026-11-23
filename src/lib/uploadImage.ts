@@ -1,8 +1,9 @@
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadImage(file: File, options: { profile?: boolean } = {}): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch("/api/upload", { method: "POST", body: formData });
+  const uploadUrl = options.profile ? "/api/upload?context=profile" : "/api/upload";
+  const response = await fetch(uploadUrl, { method: "POST", body: formData });
   if (!response.ok) throw new Error("Image upload failed");
 
   const result = await response.json() as { url?: unknown };

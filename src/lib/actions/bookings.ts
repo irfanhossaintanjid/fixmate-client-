@@ -5,19 +5,20 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 type ActionResult = { ok: true } | { ok: false; message: string };
-type CheckoutResult = ActionResult | { ok: true; url: string };
+type CheckoutResult = { ok: true; url: string } | { ok: false; message: string };
+type CustomerRequest = { ok: true; token: string; baseUrl: string } | { ok: false; error: string };
 
 const bookingIdPattern = /^[a-f\d]{24}$/i;
 
-async function getCustomerRequest() {
+async function getCustomerRequest(): Promise<CustomerRequest> {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) return { error: "Please sign in to continue." } as const;
-  if (session.user.role !== "customer") return { error: "This action is available to customers only." } as const;
+  if (!session) return { ok: false, error: "Please sign in to continue." };
+  if (session.user.role !== "customer") return { ok: false, error: "This action is available to customers only." };
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/$/, "");
-  if (!baseUrl) return { error: "The service is temporarily unavailable." } as const;
+  if (!baseUrl) return { ok: false, error: "The service is temporarily unavailable." };
 
-  return { token: session.session.token, baseUrl } as const;
+  return { ok: true, token: session.session.token, baseUrl };
 }
 
 async function readMessage(response: Response) {
@@ -35,7 +36,7 @@ export async function cancelCustomerBooking(bookingId: string): Promise<ActionRe
   }
 
   const request = await getCustomerRequest();
-  if ("error" in request) return { ok: false, message: request.error };
+  if (!request.ok) return { ok: false, message: request.error };
 
   try {
     const response = await fetch(`${request.baseUrl}/api/bookings/${bookingId}/cancel`, {
@@ -69,7 +70,7 @@ export async function createCustomerCheckoutSession(bookingId: string): Promise<
   }
 
   const request = await getCustomerRequest();
-  if ("error" in request) return { ok: false, message: request.error };
+  if (!request.ok) return { ok: false, message: request.error };
 
   try {
     const response = await fetch(`${request.baseUrl}/api/payments/create-checkout-session`, {
