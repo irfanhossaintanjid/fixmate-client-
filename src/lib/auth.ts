@@ -40,7 +40,13 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      role: { type: "string", required: false, defaultValue: "customer", input: true },
+      role: {
+        type: ["customer", "technician", "admin"],
+        required: false,
+        defaultValue: "customer",
+        // The signup form allows customer or technician; the server normalizes all other values.
+        input: true,
+      },
       phone: { type: "string", required: false, input: true },
       area: { type: "string", required: false, input: true },
       bio: { type: "string", required: false, input: true },
@@ -49,6 +55,12 @@ export const auth = betterAuth({
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path !== "/sign-up/email") return;
+
+      // Normalize before Better Auth validates the enum so invalid direct API values
+      // also become customer instead of being rejected or stored as elevated roles.
+      if (ctx.body && !isAllowedRole(ctx.body.role)) {
+        ctx.body.role = "customer";
+      }
 
       const password = ctx.body?.password;
       if (
