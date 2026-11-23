@@ -85,12 +85,31 @@ export function DashboardShell({ user, children }: { user: DashboardUser; childr
         <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur sm:px-6">
           <SidebarTrigger className="size-10 rounded-lg text-foreground" />
           <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
-            <Link href="/" className="text-sm font-medium text-muted-foreground transition hover:text-primary">Home</Link>
+            <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 text-sm">
+              <Link href="/" className="font-medium text-muted-foreground transition hover:text-primary">Home</Link>
+              <span aria-hidden="true" className="text-muted-foreground/60">/</span>
+              <span aria-current="page" className="truncate font-medium text-foreground">{pathname.startsWith("/dashboard/customer") ? "Customer Portal" : "Dashboard"}</span>
+            </nav>
             <div className="flex items-center gap-2">
               <ThemeToggle />
-              <span className="hidden max-w-40 truncate text-sm font-medium text-foreground sm:inline">{user.name}</span>
-              <Badge variant="secondary" className="capitalize">{user.role}</Badge>
-              <Avatar className="size-9 ring-1 ring-border">{user.image ? <AvatarImage src={user.image} alt="" /> : null}<AvatarFallback className="bg-secondary text-xs text-primary">{initials}</AvatarFallback></Avatar>
+              {user.role === "customer" ? (
+                <div className="flex min-w-0 items-center gap-3">
+                  <Avatar className="size-11 shrink-0 ring-[3px] ring-[#E5E1F0] dark:ring-[#403953]">
+                    {user.image ? <AvatarImage src={user.image} alt={`${user.name}'s profile photo`} /> : null}
+                    <AvatarFallback className="bg-[#F0ECFF] text-xs font-semibold text-[#5145CD] dark:bg-[#403953] dark:text-[#C4BFFF]">{initials}</AvatarFallback>
+                  </Avatar>
+                  <span className="min-w-0">
+                    <span className="block max-w-36 truncate text-sm font-semibold leading-5 text-foreground sm:max-w-48">{user.name}</span>
+                    <Badge variant="secondary" className="mt-0.5 h-5 rounded-full border-0 bg-[#EAE3FF] px-2.5 text-[11px] font-medium leading-none text-[#5145CD] hover:bg-[#EAE3FF] dark:bg-[#403953] dark:text-[#C4BFFF] dark:hover:bg-[#403953]">Customer</Badge>
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <span className="hidden max-w-40 truncate text-sm font-medium text-foreground sm:inline">{user.name}</span>
+                  <Badge variant="secondary" className="capitalize">{user.role}</Badge>
+                  <Avatar className="size-9 ring-1 ring-border">{user.image ? <AvatarImage src={user.image} alt="" /> : null}<AvatarFallback className="bg-secondary text-xs text-primary">{initials}</AvatarFallback></Avatar>
+                </>
+              )}
             </div>
           </div>
         </header>

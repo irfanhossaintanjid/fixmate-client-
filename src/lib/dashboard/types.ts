@@ -21,8 +21,6 @@ export type BookingSummary = {
   active: number;
   completed: number;
   byStatus: Record<BookingStatus, number>;
-  perMonth: { month: string; count: number }[];
-  readyToPay: Booking | null;
 };
 
 export type PaymentRecord = {
