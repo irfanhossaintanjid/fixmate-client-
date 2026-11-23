@@ -50,7 +50,8 @@ export function DashboardShell({ user, children }: { user: DashboardUser; childr
             <SidebarMenu className="gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const active = pathname === item.href || (item.href !== "/dashboard/customer" && pathname.startsWith(`${item.href}/`));
+                const isDashboardHome = /^\/dashboard\/(customer|technician|admin)$/.test(item.href);
+                const active = pathname === item.href || (!isDashboardHome && pathname.startsWith(`${item.href}/`));
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton render={<Link href={item.href} />} isActive={active} tooltip={item.label} className={active ? "min-h-11 bg-[#5145CD] text-white hover:bg-[#5145CD] hover:text-white data-active:bg-[#5145CD] data-active:text-white" : "min-h-11 text-white/75 hover:text-white"}>
@@ -81,7 +82,7 @@ export function DashboardShell({ user, children }: { user: DashboardUser; childr
             <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 text-sm">
               <Link href="/" className="font-medium text-muted-foreground transition hover:text-primary">Home</Link>
               <span aria-hidden="true" className="text-muted-foreground/60">/</span>
-              <span aria-current="page" className="truncate font-medium text-foreground">{pathname.startsWith("/dashboard/customer") ? "Customer Portal" : "Dashboard"}</span>
+              <span aria-current="page" className="truncate font-medium text-foreground">{pathname.startsWith("/dashboard/customer") ? "Customer Portal" : pathname.startsWith("/dashboard/technician") ? "Technician Portal" : pathname.startsWith("/dashboard/admin") ? "Admin Portal" : "Dashboard"}</span>
             </nav>
             <div className="flex items-center gap-2">
               <ThemeToggle />

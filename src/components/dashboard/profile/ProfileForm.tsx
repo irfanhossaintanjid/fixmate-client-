@@ -32,7 +32,8 @@ function validateField(field: FieldName, values: FormValues): string | undefined
   if (field === "name") {
     const name = value.trim();
     if (!name) return "Enter your full name.";
-    if (name.length < 2 || name.length > 60) return "Name must be between 2 and 60 characters.";
+    const nameLength = Array.from(name).length;
+    if (nameLength < 2 || nameLength > 60) return "Name must be between 2 and 60 characters.";
   }
   if (field === "phone" && value.trim()) {
     const phone = value.replace(/[\s-]/g, "");
@@ -63,6 +64,7 @@ export function ProfileForm({ profile, role }: { profile: SavedProfile; role: Us
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
   const [saving, setSaving] = useState(false);
   const previewUrlRef = useRef<string | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const { refetch: refreshSession } = authClient.useSession();
 
   useEffect(() => {
@@ -118,8 +120,9 @@ export function ProfileForm({ profile, role }: { profile: SavedProfile; role: Us
       if (selectedPhoto) {
         try {
           image = await uploadImage(selectedPhoto, { profile: true });
-        } catch {
-          toast.add({ title: "Photo upload failed", description: "Photo upload failed. Try again.", type: "error" });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "Photo upload failed. Try again.";
+          toast.add({ title: "Photo upload failed", description: message, type: "error" });
           return;
         }
       }
@@ -133,6 +136,12 @@ export function ProfileForm({ profile, role }: { profile: SavedProfile; role: Us
       });
 
       if (!result.ok) {
+        if (result.message === "Name must be between 2 and 60 characters.") {
+          setTouched((current) => ({ ...current, name: true }));
+          setErrors((current) => ({ ...current, name: result.message }));
+          requestAnimationFrame(() => nameInputRef.current?.focus());
+          return;
+        }
         toast.add({ title: "Profile update failed", description: result.message, type: "error" });
         return;
       }
@@ -188,6 +197,7 @@ export function ProfileForm({ profile, role }: { profile: SavedProfile; role: Us
                 <Label htmlFor="profile-name">Full Name</Label>
                 <Input
                   id="profile-name"
+                  ref={nameInputRef}
                   value={values.name}
                   onChange={(event) => updateValue("name", event.target.value)}
                   onBlur={() => validateOnBlur("name")}

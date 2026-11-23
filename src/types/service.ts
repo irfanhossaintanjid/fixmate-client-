@@ -11,6 +11,7 @@ export const serviceCategories = [
 export const serviceModes = ["Home Visit", "Shop Drop-off"] as const;
 export type ServiceCategory = (typeof serviceCategories)[number];
 export type ServiceMode = (typeof serviceModes)[number];
+export type ServiceApprovalStatus = "pending" | "approved" | "rejected";
 
 export type Service = {
   id: string;
@@ -24,6 +25,12 @@ export type Service = {
   serviceArea: string;
   technicianName: string;
   createdAt?: string;
+};
+
+export type TechnicianService = Service & {
+  approvalStatus: ServiceApprovalStatus;
+  isAvailable: boolean;
+  rejectionReason?: string;
 };
 
 export type ServicesResponse = {

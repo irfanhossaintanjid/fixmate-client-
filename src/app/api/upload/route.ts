@@ -4,7 +4,8 @@ import { auth } from "@/lib/auth";
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const MAX_REQUEST_SIZE = MAX_FILE_SIZE + 64 * 1024;
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_UPLOADS_PER_WINDOW = 5;
+// Keep production protection strict while allowing repeated local UI testing.
+const MAX_UPLOADS_PER_WINDOW = process.env.NODE_ENV === "production" ? 5 : 20;
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 
@@ -56,9 +57,12 @@ function isRateLimited(ip: string) {
 
 export async function POST(request: Request) {
   const uploadContext = new URL(request.url).searchParams.get("context");
-  if (uploadContext === "profile") {
+  if (uploadContext === "profile" || uploadContext === "service") {
     const session = await auth.api.getSession({ headers: request.headers });
-    if (!session) return Response.json({ message: "Sign in to upload a profile photo." }, { status: 401 });
+    if (!session) return Response.json({ message: "Sign in to upload an image." }, { status: 401 });
+    if (uploadContext === "service" && session.user.role !== "technician") {
+      return Response.json({ message: "Only technicians can upload service images." }, { status: 403 });
+    }
   }
 
   if (!isAllowedOrigin(request.headers.get("origin"))) {
