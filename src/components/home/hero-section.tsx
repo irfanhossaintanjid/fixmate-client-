@@ -4,7 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
-
+import {
+  ArrowRight,
+  BadgeCheck,
+  CircleDollarSign,
+  Play,
+  Search,
+  ShieldCheck,
+  Smartphone,
+  Wrench,
+} from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -15,7 +24,7 @@ type HeroSectionProps = {
   howItWorksHref?: string;
 };
 
-export function HeroSection({ imageSrc, howItWorksHref }: HeroSectionProps) {
+export function HeroSection({ imageSrc, howItWorksHref = "/about#how-it-works" }: HeroSectionProps) {
   const router = useRouter();
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {

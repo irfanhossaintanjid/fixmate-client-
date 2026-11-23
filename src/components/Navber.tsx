@@ -35,7 +35,13 @@ export default function Navber() {
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/" && !activeHash;
     if (href === "/services") return pathname.startsWith("/services");
-    return pathname === "/" && activeHash === href.slice(1);
+    if (href === "/about#how-it-works") {
+      return pathname === "/about" && activeHash === "#how-it-works";
+    }
+    if (href === "/about") {
+      return pathname === "/about" && activeHash !== "#how-it-works";
+    }
+    return false;
   };
 
   const closeMobileMenu = () => setMobileOpen(false);

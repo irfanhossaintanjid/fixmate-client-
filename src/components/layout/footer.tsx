@@ -5,8 +5,8 @@ import { BrandMark } from "@/components/layout/brand-mark";
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Browse services", href: "/services" },
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "About FixMate", href: "/#about" },
+  { label: "How it works", href: "/about#how-it-works" },
+  { label: "About FixMate", href: "/about" },
 ];
 
 const categories = ["Smartphone", "Laptop & PC", "Air conditioner", "Electrical"];
@@ -53,7 +53,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-          <p>© {new Date().getFullYear()} FixMate. All rights reserved.</p>
+          <p>© FixMate. All rights reserved.</p>
           <p className="inline-flex items-center gap-1.5"><Wrench className="size-3.5 text-primary" aria-hidden="true" /> Repair support, made clearer.</p>
         </div>
       </div>
