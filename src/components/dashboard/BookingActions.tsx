@@ -10,17 +10,20 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/toast";
 import type { Booking } from "@/lib/dashboard/types";
+import { PaymentBadge } from "@/components/ui/status-badge";
+import { cancelCustomerBooking, createCustomerCheckoutSession } from "@/lib/actions/bookings";
 
-export function BookingActions({ booking, onChanged }: { booking: Booking; onChanged?: () => void }) {
+export function BookingActions({ booking, onChanged, fullWidth = false }: { booking: Booking; onChanged?: () => void; fullWidth?: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const cancel = async () => {
+    if (busy) return;
     setBusy(true);
     try {
-      const response = await fetch(`/api/dashboard/bookings/${encodeURIComponent(booking.id)}/cancel`, { method: "PATCH" });
-      if (!response.ok) throw new Error("Unable to cancel this request. Please try again.");
+      const result = await cancelCustomerBooking(booking._id);
+      if (!result.ok) throw new Error(result.message);
       toast.add({ title: "Request cancelled", type: "success" });
       setOpen(false);
       if (onChanged) onChanged();
@@ -36,35 +39,30 @@ export function BookingActions({ booking, onChanged }: { booking: Booking; onCha
     if (busy) return;
     setBusy(true);
     try {
-      const response = await fetch("/api/dashboard/payments/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingId: booking.id }),
-      });
-      const result = await response.json();
-      if (!response.ok || typeof result.url !== "string") throw new Error("Unable to start payment. Please try again.");
+      const result = await createCustomerCheckoutSession(booking._id);
+      if (!result.ok) throw new Error(result.message);
       window.location.assign(result.url);
-    } catch {
-      toast.add({ title: "Payment could not start", description: "Please try again in a moment.", type: "error" });
+    } catch (error) {
+      toast.add({ title: "Payment could not start", description: error instanceof Error ? error.message : "Please try again in a moment.", type: "error" });
       setBusy(false);
     }
   };
 
   if (booking.status === "requested") return (
     <>
-      <Button type="button" variant="outline" className="min-h-10 rounded-lg text-destructive hover:bg-destructive/5" onClick={() => setOpen(true)} disabled={busy}>
+      <Button type="button" variant="outline" className={`min-h-11 rounded-lg text-destructive hover:bg-destructive/5 ${fullWidth ? "w-full" : ""}`} onClick={() => setOpen(true)} disabled={busy}>
         <XCircle aria-hidden="true" /> Cancel
       </Button>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Cancel this request?</AlertDialogTitle>
-            <AlertDialogDescription>This repair request will be marked as cancelled. You can browse services to make another request.</AlertDialogDescription>
+            <AlertDialogDescription>This will cancel your {booking.serviceTitle || "repair service"} request. You can only cancel while it is still in the Requested stage.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={busy}>Keep Request</AlertDialogCancel>
             <AlertDialogAction onClick={(event) => { event.preventDefault(); void cancel(); }} disabled={busy} className="bg-destructive text-white hover:bg-destructive/90">
-              {busy ? <><LoaderCircle className="animate-spin" /> Cancelling…</> : "Cancel Request"}
+              {busy ? <><LoaderCircle className="animate-spin" /> Cancelling…</> : "Yes, Cancel"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -73,9 +71,10 @@ export function BookingActions({ booking, onChanged }: { booking: Booking; onCha
   );
 
   if (booking.status === "completed" && booking.paymentStatus === "unpaid") return (
-    <Button type="button" onClick={() => void payNow()} disabled={busy} className="min-h-10 rounded-lg bg-primary px-4 text-primary-foreground hover:bg-[#4338A8]">
+    <Button type="button" onClick={() => void payNow()} disabled={busy} className={`min-h-11 rounded-lg bg-primary px-4 text-primary-foreground hover:bg-[#4338A8] ${fullWidth ? "w-full" : ""}`}>
       {busy ? <><LoaderCircle className="animate-spin" /> Starting…</> : "Pay Now"}
     </Button>
   );
+  if (booking.status === "completed" && booking.paymentStatus === "paid") return <PaymentBadge status="paid" />;
   return null;
 }

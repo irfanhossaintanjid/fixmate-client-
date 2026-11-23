@@ -10,7 +10,7 @@ export function StatusBadge({ status }: { status: BookingStatus }) {
 export function PaymentBadge({ status }: { status?: PaymentStatus }) {
   const paid = status === "paid";
   return <Badge variant="outline" className={paid
-    ? "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
+    ? "border-[#A7F3D0] bg-[#D1FAE5] text-[#047857] dark:border-[#065F46] dark:bg-[#064E3B] dark:text-[#A7F3D0]"
     : "border-orange-200 bg-orange-100 text-orange-800 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-200"}>
     {paid ? "Paid" : "Unpaid"}
   </Badge>;

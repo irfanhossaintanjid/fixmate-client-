@@ -71,13 +71,6 @@ export function DashboardShell({ user, children }: { user: DashboardUser; childr
               <SidebarMenuButton onClick={signOut} tooltip="Sign Out" className="min-h-11 text-white/75 hover:bg-red-500/15 hover:text-red-200"><LogOut /><span>Sign Out</span></SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-          <div className="mt-3 flex items-center gap-2 border-t border-white/10 px-2 pt-3 group-data-[collapsible=icon]:justify-center">
-            <Avatar className="size-9 shrink-0 ring-1 ring-white/20">
-              {user.image ? <AvatarImage src={user.image} alt="" /> : null}
-              <AvatarFallback className="bg-[#312E81] text-xs text-white">{initials}</AvatarFallback>
-            </Avatar>
-            <span className="min-w-0 group-data-[collapsible=icon]:hidden"><span className="block truncate text-sm font-medium text-white">{user.name}</span><span className="block truncate text-xs text-white/55">{user.email}</span></span>
-          </div>
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

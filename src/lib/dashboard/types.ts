@@ -2,11 +2,11 @@ export type BookingStatus = "requested" | "accepted" | "in-progress" | "complete
 export type PaymentStatus = "paid" | "unpaid";
 
 export type Booking = {
-  id: string;
+  _id: string;
+  serviceId?: string;
   serviceTitle?: string;
-  title?: string;
   serviceImage?: string;
-  image?: string;
+  category?: string;
   technicianName?: string;
   preferredDate?: string;
   basePrice?: number;
@@ -14,6 +14,22 @@ export type Booking = {
   status: BookingStatus;
   paymentStatus?: PaymentStatus;
   createdAt?: string;
+};
+
+export type BookingCounts = {
+  all: number;
+  requested: number;
+  accepted: number;
+  "in-progress": number;
+  completed: number;
+  rejected: number;
+  cancelled: number;
+};
+
+export type BookingHighlights = {
+  pendingRequests: { count: number; latestTitle: string | null };
+  inProgress: { count: number; latestTitle: string | null };
+  paymentDue: { count: number; totalAmount: number; latestTitle: string | null };
 };
 
 export type BookingSummary = {
@@ -25,10 +41,16 @@ export type BookingSummary = {
 
 export type PaymentRecord = {
   id: string;
-  bookingId: string;
   amount: number;
   transactionId: string;
   paidAt: string;
   serviceTitle?: string;
   technicianName?: string;
+};
+
+export type PaymentHistorySummary = {
+  totalPaid: number;
+  count: number;
+  lastPaymentDate: string | null;
+  latest: { serviceTitle?: string; amount: number } | null;
 };
