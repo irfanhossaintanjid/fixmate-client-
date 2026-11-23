@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navber from "@/components/Navber";
-import { Footer } from "@/components/layout/footer";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import "./globals.css";
 
@@ -17,12 +16,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} h-full antialiased`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-full bg-background font-sans text-foreground">
         <ThemeProvider>
-          <Navber />
-          <main>{children}</main>
-          <Footer />
+          <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>

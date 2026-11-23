@@ -12,6 +12,7 @@ import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -57,13 +58,15 @@ function ProfileDropdown({ user, onSignOut }: { user: NavbarUser; onSignOut: () 
         <ChevronDown className="size-4 text-muted-foreground transition group-aria-expanded:rotate-180" aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64 rounded-2xl border-border bg-popover p-2 shadow-xl">
-        <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2.5">
-          <UserAvatar user={user} large />
-          <span className="min-w-0">
-            <span className="block truncate text-sm font-semibold text-foreground">{user.name || "FixMate member"}</span>
-            <RoleBadge role={role} />
-          </span>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2.5">
+            <UserAvatar user={user} large />
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold text-foreground">{user.name || "FixMate member"}</span>
+              <RoleBadge role={role} />
+            </span>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator className="my-1 bg-border" />
         <DropdownMenuItem render={<Link href={dashboardHref} />} className="min-h-10 gap-2.5 rounded-lg px-2.5 text-foreground">
           <LayoutDashboard className="size-4 text-muted-foreground" aria-hidden="true" />Dashboard
