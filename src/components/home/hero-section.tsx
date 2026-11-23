@@ -4,16 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
-import {
-  ArrowRight,
-  BadgeCheck,
-  CircleDollarSign,
-  Play,
-  Search,
-  ShieldCheck,
-  Smartphone,
-  Wrench,
-} from "lucide-react";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
