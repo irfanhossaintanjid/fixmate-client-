@@ -1,0 +1,3 @@
+export default function CustomerDashboardLoading() {
+  return <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8" aria-label="Loading dashboard"><div className="h-9 w-64 animate-pulse rounded-lg bg-muted" /><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 3 }, (_, index) => <div key={index} className="h-32 animate-pulse rounded-2xl bg-card ring-1 ring-border" />)}</div><div className="grid gap-5 xl:grid-cols-2">{Array.from({ length: 2 }, (_, index) => <div key={index} className="h-80 animate-pulse rounded-2xl bg-card ring-1 ring-border" />)}</div><div className="h-64 animate-pulse rounded-2xl bg-card ring-1 ring-border" /></div>;
+}

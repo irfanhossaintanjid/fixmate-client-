@@ -8,10 +8,12 @@ import { Toaster } from "@/components/ui/toast";
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuthPage = pathname === "/sign-in" || pathname === "/sign-up";
+  const isDashboardPage = pathname.startsWith("/dashboard");
+  const isPaymentPage = pathname.startsWith("/payment/");
 
   return (
     <>
-      {isAuthPage ? (
+      {isAuthPage || isDashboardPage || isPaymentPage ? (
         <main>{children}</main>
       ) : (
         <>

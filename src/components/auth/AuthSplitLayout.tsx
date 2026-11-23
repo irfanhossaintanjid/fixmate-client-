@@ -2,17 +2,19 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, ClipboardCheck, CreditCard, Search } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ClipboardCheck, CreditCard, Search, type LucideIcon } from "lucide-react";
 import { BrandMark } from "@/components/layout/brand-mark";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
-const signUpBenefits = [
+type Benefit = { icon: LucideIcon; text: string; detail?: string };
+
+const signUpBenefits: Benefit[] = [
   { icon: Search, text: "Browse approved repair services" },
   { icon: ClipboardCheck, text: "Track every job step by step" },
   { icon: CreditCard, text: "Pay online only after completion" },
 ];
 
-const signInBenefits = [
+const signInBenefits: Benefit[] = [
   { icon: ClipboardCheck, text: "Follow your repair status", detail: "See status updates and technician progress in one dashboard." },
   { icon: Search, text: "Manage bookings in one place", detail: "Review your requests and keep track of scheduled repairs." },
   { icon: CreditCard, text: "Secure online payments", detail: "Pay online after the technician marks the job completed." },
